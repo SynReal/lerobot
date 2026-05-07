@@ -42,7 +42,7 @@ GRIPPER_SDK_MAX = 70.0 * 1000  # 真实 gripper 最大开合: 70mm = 70000 SDK u
 GRIPPER_RESCALE = GRIPPER_FACTOR / GRIPPER_SDK_MAX  # ≈ 1.4286, 把 driver 的 [0,0.7] → [0,1]
 
 @dataclass
-class PiperConfig(RobotConfig):
+class PiperFollowerConfig(RobotConfig):
     # CAN interface to connect to the arm (e.g., "can1")
     # Linux: "can0", "can1", etc.
     port: str

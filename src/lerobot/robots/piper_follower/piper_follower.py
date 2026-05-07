@@ -12,7 +12,7 @@ from lerobot.utils.decorators import check_if_already_connected, check_if_not_co
 
 from ..robot import Robot
 from ..utils import ensure_safe_goal_position
-from .configuration_piper import (
+from .config_piper_follower import (
     DEFAULT_JOINT_LIMITS,
     ARM_FACTOR,
     GRIPPER_UNIT_FACTOR,
@@ -20,18 +20,18 @@ from .configuration_piper import (
     GRIPPER_FACTOR,
     GRIPPER_SDK_MAX,
     GRIPPER_RESCALE,
-    PiperConfig,
+    PiperFollowerConfig,
 )
 
-from piper_sdk import C_PiperInterface_V2, enable
+from piper_sdk import C_PiperInterface_V2
 
 logger = logging.getLogger(__name__)
 
-class PiperRobot(Robot):
-    config_class = PiperConfig
-    name = "piper"
+class PiperFollowerRobot(Robot):
+    config_class = PiperFollowerConfig
+    name = "piper_follower"
 
-    def __init__(self, config: PiperConfig):
+    def __init__(self, config: PiperFollowerConfig):
         super().__init__(config)
         self.config = config
 

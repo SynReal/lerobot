@@ -4,32 +4,24 @@ from functools import cached_property
 from lerobot.types import RobotAction, RobotObservation
 from lerobot.utils.decorators import check_if_already_connected, check_if_not_connected
 
-from ..piper import PiperRobot, PiperConfig
+from ..piper_follower import PiperFollowerRobot, PiperFollowerConfig
 from ..robot import Robot
-from .config_bi_piper import BiPiperConfig
+from .config_bi_piper import BiPiperFollowerConfig
 
 logger = logging.getLogger(__name__)
 
 
-class BiPiper(Robot):
-    config_class = BiPiperConfig
-    name = "bi_piper"
+class BiPiperFollower(Robot):
+    config_class = BiPiperFollowerConfig
+    name = "bi_piper_follower"
 
-    def __init__(self, config: BiPiperConfig):
+    def __init__(self, config: BiPiperFollowerConfig):
         super().__init__(config)
         self.config = config
 
-        if config.cameras:
-            left_cameras = config.cameras
-            right_cameras = {}
-        else:
-            left_cameras = config.left_arm_config.cameras
-            right_cameras = config.right_arm_config.cameras
-
-
-        left_arm_config = PiperConfig(
+        left_arm_config = PiperFollowerConfig(
             port=self.config.left_arm_config.port,
-            cameras=left_cameras,
+            cameras=self.config.left_arm_config.cameras,
             side="left",
             home_position=self.config.left_arm_config.home_position,
             joint_limits=self.config.left_arm_config.joint_limits,
@@ -40,9 +32,9 @@ class BiPiper(Robot):
             is_mit_mode=self.config.left_arm_config.is_mit_mode,
         )
 
-        right_arm_config = PiperConfig(
+        right_arm_config = PiperFollowerConfig(
             port=self.config.right_arm_config.port,
-            cameras=right_cameras,
+            cameras=self.config.right_arm_config.cameras,
             side="right",
             home_position=self.config.right_arm_config.home_position,
             joint_limits=self.config.right_arm_config.joint_limits,
@@ -53,10 +45,10 @@ class BiPiper(Robot):
             is_mit_mode=self.config.right_arm_config.is_mit_mode,
         )
 
-        self.left_arm = PiperRobot(left_arm_config)
-        self.right_arm = PiperRobot(right_arm_config)
+        self.left_arm = PiperFollowerRobot(left_arm_config)
+        self.right_arm = PiperFollowerRobot(right_arm_config)
 
-        self.cameras = {**self.left_arm.cameras, **self.right_arm.cameras}
+        self.cameras = {**config.cameras, **self.left_arm.cameras, **self.right_arm.cameras}
 
     @property
     def _robot_ft(self) -> dict[str, type]:
