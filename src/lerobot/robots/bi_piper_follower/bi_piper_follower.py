@@ -19,9 +19,16 @@ class BiPiperFollower(Robot):
         super().__init__(config)
         self.config = config
 
+        if config.cameras:
+            left_cameras = config.cameras
+            right_cameras = {}
+        else:
+            left_cameras = config.left_arm_config.cameras
+            right_cameras = config.right_arm_config.cameras
+
         left_arm_config = PiperFollowerConfig(
             port=self.config.left_arm_config.port,
-            cameras=self.config.left_arm_config.cameras,
+            cameras=left_cameras,
             side="left",
             home_position=self.config.left_arm_config.home_position,
             joint_limits=self.config.left_arm_config.joint_limits,
@@ -34,7 +41,7 @@ class BiPiperFollower(Robot):
 
         right_arm_config = PiperFollowerConfig(
             port=self.config.right_arm_config.port,
-            cameras=self.config.right_arm_config.cameras,
+            cameras=right_cameras,
             side="right",
             home_position=self.config.right_arm_config.home_position,
             joint_limits=self.config.right_arm_config.joint_limits,
