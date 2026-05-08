@@ -48,7 +48,7 @@ class BiPiperFollower(Robot):
         self.left_arm = PiperFollowerRobot(left_arm_config)
         self.right_arm = PiperFollowerRobot(right_arm_config)
 
-        self.cameras = {**config.cameras, **self.left_arm.cameras, **self.right_arm.cameras}
+        self.cameras = {**self.left_arm.cameras, **self.right_arm.cameras}
 
     @property
     def _robot_ft(self) -> dict[str, type]:
